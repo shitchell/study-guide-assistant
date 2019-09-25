@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 # It's servers all the way down
-from bottle import route, run, install, response, request, ServerAdapter
+from bottle import route, run, install, response, request, ServerAdapter, static_file
 from cheroot.ssl.builtin import BuiltinSSLAdapter
 from cheroot import wsgi
 import ssl
+import pkgutil
+import os
 
 # Search imports
 from googlesearch import search
@@ -74,7 +76,12 @@ def simplify_string(s):
 	s = s.translate(str.maketrans('', '', string.punctuation))
 	# Whitespace = space space
 	s = " ".join(s.split())
-	return s
+	return s.strip()
+
+# Package relative static filepaths
+def _static_file(filepath):
+	package_filepath = os.path.dirname(os.path.abspath(__file__))
+	return static_file("htdocs/" + filepath, package_filepath)
 
 @route('/')
 def do_index():
@@ -89,6 +96,14 @@ def do_search():
 		max_results = 3
 	max_results = min(10, max_results)
 	return json.dumps(quizlet_search(query, max_results))
+
+@route('/sample')
+def do_sample():
+	return _static_file("sample.html")
+
+@route('/static/<path:path>')
+def do_static(path):
+	return _static_file("static/" + path)
 
 if __name__ == "__main__":
 	install(EnableCors())
