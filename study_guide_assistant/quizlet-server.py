@@ -14,7 +14,7 @@ import json
 import re
 
 # Enable cors
-class enable_cors(object):
+class EnableCors(object):
 	name = 'enable_cors'
 	api = 2
 
@@ -30,7 +30,7 @@ class enable_cors(object):
 		return _enable_cors
 
 # Enable ssl
-class ssl_server(ServerAdapter):
+class SSLServer(ServerAdapter):
 	def run(self, handler):
 		server = wsgi.Server((self.host, self.port), handler)
 		server.ssl_adapter = BuiltinSSLAdapter("/etc/httpd/cert/shitchell.com.crt", "/etc/httpd/cert/shitchell.com.key")
@@ -92,5 +92,5 @@ def do_search():
 @route('/css')
 
 if __name__ == "__main__":
-	install(enable_cors())
-	run(host='0.0.0.0', port=9001, debug=True, server=ssl_server)
+	install(EnableCors())
+	run(host='0.0.0.0', port=9001, debug=True, server=SSLServer)

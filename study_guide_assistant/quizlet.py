@@ -2,7 +2,7 @@ import re
 import json
 import requests
 
-class page:
+class Page:
 	def __init__(self, url):
 		self.url = url
 		self._response = None
@@ -22,10 +22,10 @@ class page:
 			page_data = json.loads(page_data[0])
 			for key in page_data['termIdToTermsMap']:
 				term_data = page_data['termIdToTermsMap'][key]
-				term = page.term(term_data['word'], term_data['definition'], term_data['lastModified'])
+				term = Page.Term(term_data['word'], term_data['definition'], term_data['lastModified'])
 				self.terms.append(term)
 
-	class term:
+	class Term:
 		def __init__(self, term, definition, timestamp):
 			self.term = term
 			self.term_short = term[:20] + "..." if len(term) > 20 else term
