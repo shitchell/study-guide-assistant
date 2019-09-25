@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-# it's servers all the way down
+# It's servers all the way down
 from bottle import route, run, install, response, request, ServerAdapter
 from cheroot.ssl.builtin import BuiltinSSLAdapter
 from cheroot import wsgi
 import ssl
 
-# because why make a separate file for searching quizlet
+# Search imports
 from googlesearch import search
 import quizlet
 import string
