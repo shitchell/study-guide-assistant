@@ -54,7 +54,7 @@ def quizlet_search(query, max_results=3):
 	query = simplify_string(query)
 	results = search('site:quizlet.com "%s"' % query, stop=max_results)
 	for url in results:
-		quizlet_page = quizlet.page(url)
+		quizlet_page = quizlet.Page(url)
 		for term in quizlet_page.terms:
 			if query in simplify_string(term.term):
 				term_dict = {
@@ -87,9 +87,8 @@ def do_search():
 		max_results = int(request.query.results)
 	except:
 		max_results = 3
+	max_results = min(10, max_results)
 	return json.dumps(quizlet_search(query, max_results))
-
-@route('/css')
 
 if __name__ == "__main__":
 	install(EnableCors())
