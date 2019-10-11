@@ -9,7 +9,7 @@ import pkgutil
 import os
 
 # Search imports
-from googlesearch import search
+from google import search
 import quizlet
 import string
 import json
@@ -35,7 +35,10 @@ class EnableCors(object):
 class SSLServer(ServerAdapter):
 	def run(self, handler):
 		server = wsgi.Server((self.host, self.port), handler)
-		server.ssl_adapter = BuiltinSSLAdapter("/etc/httpd/cert/shitchell.com.crt", "/etc/httpd/cert/shitchell.com.key")
+		chain = "/etc/letsencrypt/live/quizlet.shitchell.com/fullchain.pem"
+		cert = "/etc/letsencrypt/live/quizlet.shitchell.com/cert.pem"
+		key = "/etc/letsencrypt/live/quizlet.shitchell.com/privkey.pem"
+		server.ssl_adapter = BuiltinSSLAdapter(cert, key, chain)
 
 		# By default, the server will allow negotiations with old protocols,
 		# so we only allow TLSv1.2
@@ -51,10 +54,14 @@ class SSLServer(ServerAdapter):
 def quizlet_search(query, max_results=3):
 	response = {
 		"query": query,
+		"exact": True,
 		"results": []
 	}
 	query = simplify_string(query)
-	results = search('site:quizlet.com "%s"' % query, stop=max_results)
+	results = search('"%s"' % query, stop=max_results)
+	if not results:
+		results = search('%s' % query, stop=max_results)
+		response['exact'] = False
 	for url in results:
 		quizlet_page = quizlet.Page(url)
 		for term in quizlet_page.terms:
@@ -97,9 +104,13 @@ def do_search():
 	max_results = min(10, max_results)
 	return json.dumps(quizlet_search(query, max_results))
 
-@route('/sample')
-def do_sample():
+@route('/sample/demo')
+def do_demo():
 	return _static_file("sample.html")
+
+@route('/sample/quiz')
+def do_quiz():
+    return _static_file("demo.html")
 
 @route('/static/<path:path>')
 def do_static(path):

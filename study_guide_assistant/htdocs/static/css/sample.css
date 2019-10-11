@@ -1,1 +1,54 @@
-asdf
+body, html {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	background-color: lightblue;
+	font-family: arial, sans-serif;
+}
+
+body {
+	width: 80%;
+	margin: auto;
+	background-color: #FFF;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+header {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    padding: 0.5em;
+    background-color: blue;
+    color: white;
+}
+
+main {
+    padding: 1em;
+}
+
+.question:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 1em;
+}
+
+.question {
+    padding: 1em 0;
+}
+
+footer {
+    font-style: italic;
+    font-size: 0.8em;
+    color: #333;
+    text-align: right;
+    padding: 0.5em;
+}
+
+footer a {
+    text-decoration: none;
+    color: #666;
+}
+footer a:hover {
+    color: #888;
+}
