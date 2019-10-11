@@ -92,7 +92,7 @@ def _static_file(filepath):
 
 @route('/')
 def do_index():
-	return 'one comes after two.'
+	return _static_file("index.html")
 
 @route('/search')
 def do_search():
